@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>less 1</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sample">
+            <input  type="text" v-model="firstName">
+            <hr>
+            <input  type="text" v-model="lastName">
+            <hr>
+            <input  type="text" v-model.lazy="promo">
+            <hr>
+            <h2 >Hello, {{ fullName }}</h2>
+            <hr>
+            <button class="btn btn-success" @click="showText = !showText">
+                toggleText
+            </button>
+            <hr>
+            <div v-show="showText">
+                Your sele is {{ sale }}%
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getSale(code, callBack){
+            let codes = {
+                newYear : 10,
+                some: 20
+            }
+
+            let sale = (codes[code] !== undefined) ? codes[code] : 0;
+
+            setTimeout(() => {
+                callBack(sale);
+            }, 2000)
+        }
+
+        new Vue({
+            el: '.sample',
+            data: {
+                firstName: '',
+                lastName: '',
+                promo: '',
+                showText: true,
+                sale: ''
+            },
+            computed: {
+                fullName() {
+                    return this.firstName + ' ' + this.lastName
+                },
+                sale(){
+                    return getSale(this.promo);
+                }
+            },
+            watch: {
+                promo() {
+                    getSale(this.promo, (sale) => {
+                        this.sale = sale;
+                    })
+                }
+            }
+
+        });
+    </script>
+    
+</body>
+</html>
