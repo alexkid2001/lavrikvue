@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        .my-info {
+            font-style: italic;
+        }
+
+        .my-warning {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .table-some {
+            color: #ffffff;
+            background-color: #000000;
+        }
+    </style>
+    <title>less 1</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sample">
+            <div class="col-md-6 px-3 py-3 pt-md-5 pb-md-4 mx-auto">
+                <div class="alert" :class="divClassName">
+                    Some text
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input  type="radio" 
+                                class="form-check-input"
+                                value="info"
+                                v-model="divClass">
+                        Info
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input  type="radio" 
+                                class="form-check-input"
+                                value="warning"
+                                v-model="divClass">
+                        Warning
+                    </label>
+                </div>
+                <hr>
+                <div class="form-check" v-for="(value, name) in flags">
+                    <label class="form-check-label">
+                        <input  type="checkbox" 
+                                class="form-check-input"
+                                v-model="flags[name]">
+
+                        {{ name }}
+                    </label>
+                </div>
+                <hr>
+                <table class="table" :class="flags">
+                    <tr>
+                        <td>title</td>
+                        <td>Some</td>
+                        <td>nz</td>
+                    </tr>
+                    <tr>
+                        <td>title</td>
+                        <td>Some</td>
+                        <td>nz</td>
+                    </tr>
+                    <tr>
+                        <td>title</td>
+                        <td>Some</td>
+                        <td>nz</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sample = new Vue({
+            el: '.sample',
+            data: {
+                divClass: '',
+                flags: {
+                    'table-bordered': false,
+                    'table-hover': false,
+                    'table-some': false
+                }
+            },
+            computed: {
+                divClassName() {
+                    return [
+                    'alert-' + this.divClass,
+                    'my-' + this.divClass
+                    ] 
+                }
+            }
+        });
+    </script>
+    
+</body>
+</html>
