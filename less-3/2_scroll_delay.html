@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="css/styles.css" rel="stylesheet">
+	<style>
+	    .content{
+			height: 300px;
+			overflow: auto;
+		}
+	</style>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sample">
+            <form @submit.prevent="formSubmited = true" v-if="!formSubmited">
+        		<div class="content alert alert-info" v-ondelay:scroll.1000="onScroll">
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+				</div>
+				<div class="form-check" v-if="scrolled">
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" v-model="flags.agree"> 
+						I agree this test
+					</label>
+				</div>
+				<div class="form-check" v-if="scrolled">
+						<label class="form-check-label">
+							<input class="form-check-input" type="checkbox" v-model="flags.spam"> 
+							Send me spam
+						</label>
+					</div>
+		        <div class="form-check" v-if="flags.spam">
+					<label class="form-check-label">
+						<input class="form-check-input" type="radio" value="email" v-model="spam"> 
+						Semd me spam on email
+					</label>
+				</div>
+				<div class="form-check" v-if="flags.spam">
+						<label class="form-check-label">
+							<input class="form-check-input" type="radio" value="phone" v-model="spam"> 
+							Semd me spam on phone
+						</label>
+					</div>
+			    <hr>
+				<button class="btn btn-primary" v-if="flags.agree">
+					Send Data
+				</button>
+			</form>
+			<div v-else>
+				<table class="table table-bordered">
+					<tr>
+						<td>Agree</td>
+						<td>{{flags.agree}}</td>
+					</tr>
+					<tr>
+						<td>Spam</td>
+						<td>{{ flags.spam }}</td>
+					</tr>
+					<tr v-if="flags.spam">
+						<td>Send on</td>
+						<td>{{ spam }}</td>
+					</tr>
+				</table>
+			</div> 
+		</div>
+    </div>
+	<script>
+
+		Vue.directive('ondelay', {
+            bind(el, options){
+                let timer;
+                let timeout = 0;
+
+                for(let name in options.modifiers) {
+                    if(!isNaN(+name)) {
+                        timeout = parseInt(name)
+                    }
+                }
+
+                let callback = (e) => {
+                    if(timer !== undefined) {
+                        clearInterval(timer);
+                    }
+
+                    if(options.modifiers.prevent) {
+                        e.preventDefault();
+                    }
+
+                    timer =setTimeout(() => {
+                        options.value.call(this, e);
+                    }, timeout)
+                    
+                }
+                el.addEventListener(options.arg, callback)
+                // console.log(options)
+            }
+        });
+		
+		new Vue({
+			el: '.sample',
+			data: {
+				scrolled: false,
+				formSubmited: false,
+				flags: {
+					agree: false,
+					spam: false
+				},
+				spam: 'phone'
+			},
+			methods: {
+				onScroll ({ target: { scrollTop, clientHeight, scrollHeight }}) {
+					console.log(1);
+					if (scrollTop + clientHeight >= scrollHeight) {
+						this.scrolled = true;
+					}
+				}
+			}
+		});
+
+	</script>
+</body>
+</html>
